@@ -71,7 +71,6 @@ class action{
     public function validate_form($post){
 
         //validation error
-        $errors = [];
         if(isset($post['name'])){
             if (empty($post['name'])) {
 
@@ -119,21 +118,16 @@ class action{
             order by name";
             $result = $db->prepare($query);
             $result->execute();
-
-            $arr = []; 
-
-            $row = array();
-            $data = new stdClass();
             
             foreach($result as $row){
-                $data->selected_select_arr[] = $row['selector_id'];
+                $this->selected_select_arr[] = $row['selector_id'];
             }
             if(!empty($row['name']) || !empty($row['agree'])){
-                $data->name = $row['name'];
-                $data->agree = $row['agree'];
+                $this->name = $row['name'];
+                $this->agree = $row['agree'];
             }
 
-        return $data;
+        return $this;
     }
 
     
