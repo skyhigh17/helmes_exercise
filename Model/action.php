@@ -1,7 +1,10 @@
 <?php 
 
 class action{
-
+	
+    public array $selected_arr;
+    public string $name;
+    public bool $agree;
 
     public function insert_form($post_data){
 
