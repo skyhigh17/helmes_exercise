@@ -23,7 +23,7 @@ class action{
 
                 if(isset($post_data['name'])){
                     
-                    update_form($post_data);
+                    $this->update_form($post_data);
                 }
             }
             else
