@@ -9,7 +9,6 @@ class action{
     public function insert_form($post_data){
 
         $db = db();
-
         if(!empty($post_data)){
 
             //when name already exists in database go update database
@@ -28,15 +27,12 @@ class action{
                     
                     $this->update_form($post_data);
                 }
-            }
-            else
-            {
+            }else{
+
                 //do inserts 
-
                 $agree = "";
+                if(isset($post_data['agree'])){
 
-                if(isset($post_data['agree']))
-                {
                     $agree = true;
                 }
              
@@ -53,18 +49,14 @@ class action{
                     
                     //insert into select
 
-                    foreach ($post_data['selector'] as $row)
-                    {
+                    foreach ($post_data['selector'] as $row){
                         
                         $stmt = $db->prepare("INSERT INTO selector_to_user (selector_id,  user_submit_id)  VALUES (:selector_id, :fuser_submit_id)");
-
                         $stmt->execute([
                         'selector_id' => $row, 
                         'fuser_submit_id'=> $last_id,
                         ]);
-
                     }
-           
                 }
             }
         }
@@ -75,7 +67,7 @@ class action{
 
         //validation error
         if(isset($post['name'])){
-            if (empty($post['name'])) {
+            if (empty($post['name'])){
 
                 $_SESSION['error_name'] = ERROR_NAME;
                 $_SESSION['error_class_name'] = ERROR_CLASS;
@@ -112,7 +104,6 @@ class action{
     public function form_data($name){
 
             $where = "where name = '".$name."' ";
-
             $db = db();
             $query = "SELECT user_submit.id, name, agree, selector_to_user.selector_id as selector_id 
                 FROM user_submit
@@ -136,16 +127,13 @@ class action{
     
     public function update_form($post){
 
-
         if(!empty($post['name']) && isset($post['selector']) && isset($post['agree'])){
 
             $db = db();
+            if(isset($post['agree'])){
 
-            if(isset($post['agree']))
-            {
                 $agree = 1;
             }
-
 
             $result = $db->prepare("SELECT user_submit.id FROM user_submit where name = :name order by name");
             $result->execute([
@@ -153,7 +141,6 @@ class action{
             ]);
 
             $row = $result->fetch();
-
             $user_insert_id = $row['id']; 
 
             // delete old selectors and insert new ones with user id for update
@@ -162,8 +149,7 @@ class action{
                 'id'=>$user_insert_id,
             ]);
 
-            foreach ($post['selector'] as $row)
-            {
+            foreach ($post['selector'] as $row){
                 
                 $stmt = $db->prepare("INSERT INTO selector_to_user (selector_id,  user_submit_id)  VALUES (:selector_id, :fuser_submit_id)");
                 $stmt->execute([

@@ -16,8 +16,6 @@ class controller {
       
         //save controller
         $action = new action;   
-
-
         if(isset($this->post['submit'])){
             
             if(!empty($_SESSION['username'])){
@@ -34,9 +32,9 @@ class controller {
     }
     
     public function show(){
+
         //show form data
         $action = new action; 
-
         if(!empty($_SESSION['username'])){
             $username = $_SESSION['username'];
             $ret_data = $action->form_data($username);

@@ -26,7 +26,7 @@ session_start();
 include_once 'config.php';
 include_once 'db_connection.php';
 
-class Sectors {
+class Sectors{
 
 	private array $selected; 
 
@@ -35,21 +35,18 @@ class Sectors {
 		$this->selected = $select_arr;
 	}
 	
-	private function build_selector_dimesions(array $data, $parentId = 0, $counter = 0)
-	{
+	private function build_selector_dimesions(array $data, $parentId = 0, $counter = 0){
+		
 		//iterate through database array
 		$branch = array();
-		
-		foreach ($data as $result)
-		{
+		foreach ($data as $result){
 			
-			if ($result['parent_id'] == $parentId) 
-			{
+			if ($result['parent_id'] == $parentId){
 				//add level to find dimension
 				$category = $this->build_selector_dimesions($data, $result['id'], $counter + 1);
 				$result['counter'] = $counter;
-				if ($category)
-				{
+				if ($category){
+
 					$result['category'][] = $category;
 				}
 				$branch[] = $result;
@@ -59,53 +56,52 @@ class Sectors {
 	}
 
 
-	private function createSelect($tree) { 
+	private function createSelect($tree){ 
 		
 		//iterate through selector array;
-		foreach($tree as $node)
-		{
-			if(isset($node['counter']))
-			{
+		foreach($tree as $node){
+
+			if(isset($node['counter'])){
+
 				$counter = $node['counter'] - 1;
 				$tyhimik = "&nbsp&nbsp&nbsp&nbsp";
 				$tyhi = "";
+				for($i = 0; $i <= $counter; $i++){
 
-				for($i = 0; $i <= $counter; $i++)
-				{
 					$tyhi.= $tyhimik;
 				}
 			}
 			
-			if(isset($node['category']) || isset($node['id']) || isset($node['name']))
-			{
+			if(isset($node['category']) || isset($node['id']) || isset($node['name'])){
+
 				$selected = "";
 				if(in_array($node['id'], $this->selected)){
 					$selected = 'selected="selected"';
 				}
+
 				echo "<option $selected value=".$node['id'].">$tyhi".$node['name'];
 			}
 
-			if(is_array($node))
-			{
+			if(is_array($node)){
+
 				$this->createSelect($node);
 			}
+
 			echo "</option>";
 		}
 
 	}
 
 
-	public function create_sectors_select()
-	{
+	public function create_sectors_select(){
 		
 		$db = db(); 
 		$query = "SELECT id, parent_id, name FROM form_selector_p order by name";
 		$result = $db->prepare($query);
 		$result->execute();
 		$arr = [];
+		foreach ($result as $key => $row){
 
-		foreach ($result as $key => $row)
-		{
 			$arr[] = $row;
 		}
 
