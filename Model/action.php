@@ -13,7 +13,6 @@ class action{
 
             //when name already exists in database go update database
             //cases not covered = there can be only one name, otherwise it will be over written
-            
             $result = $db->prepare("SELECT name FROM user_submit where name = :name order by name");
             $result->execute([
                 'name'=>$post_data['name'],
@@ -48,7 +47,6 @@ class action{
                     $last_id = $db->lastInsertId();
                     
                     //insert into select
-
                     foreach ($post_data['selector'] as $row){
                         
                         $stmt = $db->prepare("INSERT INTO selector_to_user (selector_id,  user_submit_id)  VALUES (:selector_id, :fuser_submit_id)");
@@ -72,6 +70,7 @@ class action{
                 $_SESSION['error_name'] = ERROR_NAME;
                 $_SESSION['error_class_name'] = ERROR_CLASS;
             }else{
+
                 $_SESSION['error_name'] = "";
                 $_SESSION['error_class_name'] = "";
             }
@@ -84,16 +83,19 @@ class action{
         }
         
         if(!empty($post['selector'])){
+
             $_SESSION['error_selector'] = "";
             $_SESSION['error_selector_class'] = "";
         }
         
         if(!isset($post['agree'])){
+
             $_SESSION['error_agreement'] = ERROR_AGREE;
             $_SESSION['error_agreement_class'] = ERROR_CLASS;
         }
 
         if(!empty($post['agree'])){
+
             $_SESSION['error_agreement'] = "";
             $_SESSION['error_agreement_class'] = "";
         }
@@ -114,9 +116,11 @@ class action{
             $result->execute();
             
             foreach($result as $row){
+
                 $this->selected_select_arr[] = $row['selector_id'];
             }
             if(!empty($row['name']) || !empty($row['agree'])){
+
                 $this->name = $row['name'];
                 $this->agree = $row['agree'];
             }
